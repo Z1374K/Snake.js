@@ -21,6 +21,14 @@
         var widthInBlocks = width / blockSize;
         var heightInBlocks = height / blockSize;
         var score = 0;
+        var sectionId = setInterval(function () {
+            context.clearRect(0,0,width,height);
+            showScore();
+            snake.move();
+            snake.draw();
+            apple.draw();
+            drawFrame();
+        }, 100);
 
         function drawFrame() {
             context.fillStyle = "Gray";
@@ -28,6 +36,40 @@
             context.fillRect(0,height - blockSize, width, blockSize);
             context.fillRect(0,0,blockSize,width);
             context.fillRect(width - blockSize,0,blockSize,height);
+        };
+        function showScore() {
+            context.font = "20px Courier";
+            context.fillStyle = "Black";
+            context.textAlign = "left";
+            context.textBaseline = "top";
+            context.fillText("Score: " + score, blockSize, blockSize);
+        };
+        function gameOver() {
+            clearInterval(sectionId);
+            context.font = "60px Courier";
+            context.fillStyle = "Black";
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+            context.fillText("Game Over", width / 2, height / 2);
+        };
+        function Block(column, row) {
+            this.column = column;
+            this.row = row;
+        }
+        Block.prototype.drawSquare = function (color) {
+            var x = this.column * blockSize;
+            var y = thir.row *blockSize;
+            context.fillStyle = color;
+            context.fillRect(x,y,blockSize,blockSize);
+        };
+        Block.prototype.drawCircle = function (color) {
+            var middleX = this.column * blockSize + blockSize / 2;
+            var middleY = this.row * blockSize + blockSize / 2;
+            context.fillStyle = color;
+            circle(middleX,middleY,blockSize / 2, true);
+        };
+        Block.prototype.match = function (otherBlock) {
+            return this.column === otherBlock.column && this.row === otherBlock.row;
         };
 
     </script>
